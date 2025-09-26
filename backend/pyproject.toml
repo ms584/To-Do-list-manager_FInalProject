@@ -1,0 +1,6 @@
+[project]
+name = "todolist_app"
+version = "0.1.0"
+
+[tool.setuptools]
+packages = ["todolist_app"]

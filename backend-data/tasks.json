@@ -1,0 +1,67 @@
+[
+    {
+        "id": "8d05cbf5-4f76-42bb-83ee-6ca72fb5c147",
+        "title": "<script>alert('Stored XSS 1')</script>",
+        "done": false
+    },
+    {
+        "id": "e547958c-f56a-4310-86db-14eaaf3b0dc3",
+        "title": "<img src=x onerror=alert('Stored XSS 2')>",
+        "done": false
+    },
+    {
+        "id": "d9359565-8f72-4d5e-b21b-c84037a80898",
+        "title": "My Task\" onmouseover=\"alert('Stored XSS 3')",
+        "done": false
+    },
+    {
+        "id": "86da774a-602c-4f90-8814-a4d5f19bf251",
+        "title": "<a href=\"javascript:alert('Stored XSS 4')\">Click Me</a>",
+        "done": false
+    },
+    {
+        "id": "809f6893-3f55-4977-9874-ee40dce41b4c",
+        "title": "<h1>This should not be a heading</h1>",
+        "done": false
+    },
+    {
+        "id": "a45f7d04-813f-4f61-8552-1686bcb24b91",
+        "title": "<div id=\"new_element\">Injecting a div</div>",
+        "done": false
+    },
+    {
+        "id": "69228de1-e463-4683-a7f8-e3837ec0ab8e",
+        "title": "{\"$ne\": \"some_value\"}",
+        "done": false
+    },
+    {
+        "id": "8910aefe-953d-41ae-8e3a-de57d80fbb13",
+        "title": "{\"$gt\": \"\"}",
+        "done": false
+    },
+    {
+        "id": "83b9dc8e-826f-4a68-9dc6-a5cb80fae583",
+        "title": "{\"$where\": \"sleep(1000)\"}",
+        "done": false
+    },
+    {
+        "id": "c9cd46a1-bee4-42fe-933e-77bdcdb0f52d",
+        "title": "{{7*7}}",
+        "done": false
+    },
+    {
+        "id": "70082a7e-353b-4a98-b1c4-b151f59e7513",
+        "title": "<%= 7*7 %>",
+        "done": false
+    },
+    {
+        "id": "763df065-10a3-4aa9-a193-91e252759a11",
+        "title": "${alert('Client-Side')}",
+        "done": false
+    },
+    {
+        "id": "0cee9205-b5bc-4473-b3f8-60aa06dd0bcc",
+        "title": "Valid Title",
+        "done": false
+    }
+]

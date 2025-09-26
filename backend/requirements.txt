@@ -1,0 +1,9 @@
+fastapi
+uvicorn[standard]
+python-multipart
+# For allowing the frontend to talk to the backend
+fastapi-cors
+
+# For testing our API
+pytest
+httpx

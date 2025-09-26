@@ -1,0 +1,30 @@
+# This is the master file that tells Docker Compose how to run your services.
+version: '3.8'
+
+services:
+  # This defines your Python backend service.
+  backend:
+    build: ./backend
+    environment:
+      - PYTHONPATH=/app
+    volumes:
+      # This links the ./backend-data folder on your computer to the /app
+      # folder inside the container. This is how your tasks.json data persists!
+      - ./backend-data:/data
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/docs"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # This defines your React frontend service.
+  frontend:
+    build: ./frontend
+    ports:
+      # This maps port 80 on your computer to port 80 inside the container.
+      # This is how you can access the website at http://localhost
+      - "80:80"
+    depends_on:
+      # This tells the frontend to wait until the backend is healthy before starting.
+      backend:
+        condition: service_healthy

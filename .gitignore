@@ -1,0 +1,70 @@
+# =============================================================================
+# Python
+# =============================================================================
+
+# Virtual Environments
+# Ignore all local virtual environments, wherever they may be.
+.venv/
+**/__pycache__/
+
+# Compiled Python files
+*.pyc
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Pytest
+.pytest_cache/
+.coverage
+.tox/
+
+# =============================================================================
+# Node.js
+# =============================================================================
+
+# Ignore all node_modules directories. This is the most important rule.
+**/node_modules
+
+# Ignore build output from the frontend
+/frontend/build/
+
+# Log files
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+
+# =============================================================================
+# Editor & IDE specific files
+# =============================================================================
+.idea/
+.vscode/
+*.swp
+*~
+
+# =============================================================================
+# Operating System specific files
+# =============================================================================
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
