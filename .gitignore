@@ -1,70 +1,58 @@
-# =============================================================================
-# Python
-# =============================================================================
+# Environment Variables
+.env
+*.env.local
+backend/.env
+frontend/.env
 
+# Python / Pytest
 # Virtual Environments
-# Ignore all local virtual environments, wherever they may be.
 .venv/
-**/__pycache__/
+venv/
+ENV/
+env/
 
-# Compiled Python files
+# Python Cache
+__pycache__/
 *.pyc
 
-# Distribution / packaging
-.Python
-build/
-develop-eggs/
-dist/
-downloads/
-eggs/
-.eggs/
-lib/
-lib64/
-parts/
-sdist/
-var/
-wheels/
-*.egg-info/
-.installed.cfg
-*.egg
-MANIFEST
-
-# Pytest
+# Pytest Cache
 .pytest_cache/
-.coverage
-.tox/
 
-# =============================================================================
-# Node.js
-# =============================================================================
+# Python packaging artifacts
+*.egg-info/
+build/
+dist/
 
-# Ignore all node_modules directories. This is the most important rule.
+# Node.js / React
+# Dependency directories
 **/node_modules
 
-# Ignore build output from the frontend
+# Frontend build output
 /frontend/build/
 
 # Log files
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-lerna-debug.log*
 
-# =============================================================================
 # Editor & IDE specific files
-# =============================================================================
-.idea/
 .vscode/
+.idea/
 *.swp
 *~
+# VS Code history extension folder
+.history/
 
-# =============================================================================
 # Operating System specific files
-# =============================================================================
+# macOS
 .DS_Store
-.DS_Store?
-._*
-.Spotlight-V100
-.Trashes
-ehthumbs.db
+.AppleDouble
+.LSOverride
+
+# Windows
 Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Application Data
+/backend-data/

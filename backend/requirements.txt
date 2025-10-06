@@ -1,9 +1,22 @@
+# FastAPI and Server
 fastapi
 uvicorn[standard]
-python-multipart
-# For allowing the frontend to talk to the backend
-fastapi-cors
+pydantic-settings
 
-# For testing our API
+# Database (MongoDB)
+beanie
+motor
+
+# Authentication & Security
+python-jose[cryptography]
+passlib[bcrypt]
+google-auth
+requests
+
+# For testing
 pytest
 httpx
+pytest-asyncio
+
+# Generate PDF 
+reportlab

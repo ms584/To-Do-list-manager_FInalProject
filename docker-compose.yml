@@ -1,30 +1,47 @@
-# This is the master file that tells Docker Compose how to run your services.
-version: '3.8'
-
 services:
-  # This defines your Python backend service.
+  # Backend Service (Updated)
   backend:
     build: ./backend
     environment:
       - PYTHONPATH=/app
+      # Added username (root) and password (password) to the connection string
+      - DATABASE_URL=mongodb://root:password@mongo:27017
+      
+      - DATABASE_NAME=todo_app
+      - GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID} # Reads from root .env file
+      - SECRET_KEY=${SECRET_KEY}             # Reads from root .env file
     volumes:
-      # This links the ./backend-data folder on your computer to the /app
-      # folder inside the container. This is how your tasks.json data persists!
+      # This volume is now only used for local file storage if needed in the future.
+      # Database data is handled by the 'mongo-data' named volume.
       - ./backend-data:/data
+    depends_on:
+      - mongo
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8000/docs"]
-      interval: 10s
-      timeout: 5s
+      interval: 30s
+      timeout: 10s
       retries: 5
 
-  # This defines your React frontend service.
+  # Frontend Service
   frontend:
     build: ./frontend
     ports:
-      # This maps port 80 on your computer to port 80 inside the container.
-      # This is how you can access the website at http://localhost
       - "80:80"
     depends_on:
-      # This tells the frontend to wait until the backend is healthy before starting.
       backend:
         condition: service_healthy
+
+  # Database Service (Updated)
+  mongo:
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+    # This will create a root user with the specified credentials on initialization.
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=password
+    volumes:
+      - mongo-data:/data/db
+
+volumes:
+  mongo-data:
