@@ -217,3 +217,46 @@ body {
   padding: 0 5px;
   cursor: pointer;
 }
+
+/* Responsive Design for Mobile Devices  */
+/* This rule will apply only when the screen width is 600px or less */
+@media (max-width: 600px) {
+
+  /* Make the main container use the full width */
+  .App {
+    padding: 10px;
+  }
+
+  /* Stack the form inputs vertically instead of horizontally */
+  .task-form {
+    grid-template-columns: 1fr; /* Change to a single column layout */
+    gap: 10px;
+  }
+  
+  /* Make the action bar buttons stack nicely */
+  .action-bar {
+    justify-content: space-between;
+  }
+
+  /* Make the task list items more compact */
+  .task-list li {
+    padding: 12px;
+  }
+
+  .task-details {
+    gap: 10px;
+  }
+
+  .task-priority {
+    font-size: 1rem;
+    width: 15px;
+  }
+  
+  .task-title {
+    font-size: 1rem;
+  }
+
+  .task-time {
+    font-size: 0.8rem;
+  }
+}
