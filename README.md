@@ -1,4 +1,4 @@
-# Full-Stack Daily Planner Application (Final Project)
+# Full-Stack To-Do List Manager Application (Final Project)
 
 <!-- Badges -->
 [![License: MIT](https://img.shields.io/github/license/ms584/To-Do-list-manager_FInalProject?style=flat-square)](LICENSE)
@@ -8,7 +8,7 @@
 [![MongoDB](https://img.shields.io/badge/MongoDB-47A248?style=flat-square&logo=mongodb&logoColor=white)](https://www.mongodb.com/)
 [![Docker](https://img.shields.io/badge/Docker-20.10-2496ED?style=flat-square&logo=docker)](https://www.docker.com/)
 
-A complete, production-ready full-stack web application built from the ground up. This Daily Planner allows authenticated users to manage their personal to-do lists on a day-by-day basis, with a secure authentication system and a fully containerized deployment workflow.
+A complete, production-ready full-stack web application built from the ground up. This To-Do List Manager allows authenticated users to manage their personal to-do lists on a day-by-day basis, with a secure authentication system and a fully containerized deployment workflow.
 
 ---
 
