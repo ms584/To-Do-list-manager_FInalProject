@@ -24,7 +24,7 @@ A complete, production-ready full-stack web application built from the ground up
 
 ## Application Preview
 
-![Screenshot of the To-Do List Application](https://github.com/user-attachments/assets/e332707b-1e3c-4b84-88c3-45cbb1e7bf96)
+![Screenshot of the To-Do List Application](https://github.com/user-attachments/assets/b08de5b0-b69a-48b6-a4a9-5d33a65ff883)
 
 ---
 
@@ -162,19 +162,11 @@ To stop the application, use `docker compose down -v`.
 
 ## Testing
 
-### Backend API Tests (Pytest)
-
-1.  **Ensure the application is running:** `docker compose up -d`
-2.  **Execute the tests inside the backend container:**
-    ```bash
-    docker compose exec backend pytest
-    ```
-
 ### Performance & Load Tests (k6)
 
 This project includes a comprehensive k6 suite for various performance tests.
 
-1.  **Install k6:** [Follow the official installation guide](https://k6.io/docs/getting-started/installation/).
+1.  **Install k6:** [Follow the official installation guide](https://github.com/grafana/k6/releases/tag/v1.3.0).
 2.  **Prepare the test scripts:**
     - Create a `.env` file inside `tests-k6/local/` (copy from `.env.example`) and add a valid JWT token obtained from your local application.
     - Run the Webpack bundler once to compile the test scripts:
