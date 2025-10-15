@@ -1,20 +1,16 @@
-# --- Python Standard Library Imports ---
-import csv
-from io import StringIO, BytesIO
-from datetime import datetime
-from typing import List
-from contextlib import asynccontextmanager
-
-# --- Third-party Library Imports ---
 from fastapi import FastAPI, Depends, HTTPException, status
 from fastapi.middleware.cors import CORSMiddleware
-from starlette.responses import StreamingResponse, Response
+from typing import List
+from datetime import date, datetime
+from contextlib import asynccontextmanager
+
+from io import BytesIO
+from starlette.responses import Response, StreamingResponse
 from reportlab.lib.pagesizes import letter
 from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, Spacer
 from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.lib import colors
 
-# --- Local Application/Library Specific Imports ---
 from core.db import init_db
 from core.security import get_current_user, create_access_token
 from documents import User, Task
@@ -24,24 +20,14 @@ from schemas import (
 )
 from services import TaskService, AuthService
 
-# --- Lifespan Manager ---
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    """Handles application startup and shutdown events."""
     await init_db()
-    print("--- Database Initialized ---")
     yield
-    print("--- Application Shutting Down ---")
 
-# --- App Initialization ---
-app = FastAPI(
-    title="To-Do List API",
-    description="API for the Full-Stack To-Do List Final Project",
-    version="1.0.0",
-    lifespan=lifespan
-)
+app = FastAPI(title="Daily Planner API", version="2.0.0", lifespan=lifespan)
 
-# --- CORS Middleware ---
+# CORS Middleware (ต้องมี)
 origins = ["*"] 
 app.add_middleware(
     CORSMiddleware,
@@ -58,7 +44,7 @@ def get_task_service():
 def get_auth_service():
     return AuthService()
     
-# --- Authentication Endpoints ---
+# --- Authentication & User Endpoints (นำเนื้อหาจริงกลับมาใส่) ---
 @app.post("/api/auth/google/login", response_model=Token, tags=["Authentication"])
 async def login_with_google(
     token_data: GoogleToken,
@@ -71,59 +57,84 @@ async def login_with_google(
     except ValueError as e:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))
 
-# --- User Endpoints ---
 @app.get("/api/users/me", response_model=UserResponse, tags=["Users"])
 async def read_users_me(current_user: User = Depends(get_current_user)):
     return current_user
 
-# --- Task Endpoints ---
-@app.get("/api/tasks", response_model=List[TaskResponse], tags=["Tasks"])
-async def get_tasks(
+# --- Daily Log & Task Endpoints ---
+@app.get("/api/logs/{day_str}", response_model=List[TaskResponse], tags=["Daily Logs"])
+async def get_tasks_for_a_day(
+    day_str: str,
     current_user: User = Depends(get_current_user),
     task_service: TaskService = Depends(get_task_service)
 ):
-    return await task_service.get_user_tasks(current_user)
+    """Retrieves all tasks for a specific day."""
+    try:
+        day = date.fromisoformat(day_str)
+    except ValueError:
+        raise HTTPException(status_code=400, detail="Invalid date format. Use YYYY-MM-DD.")
+    return await task_service.get_tasks_for_day(current_user.id, day)
 
-# ... (POST, PUT, DELETE endpoints for tasks are the same) ...
-@app.post("/api/tasks", response_model=TaskResponse, status_code=201, tags=["Tasks"])
-async def add_task(
+@app.post("/api/logs/{day_str}/tasks", response_model=TaskResponse, status_code=201, tags=["Daily Logs"])
+async def add_task_for_a_day(
+    day_str: str,
     task_data: TaskCreate,
     current_user: User = Depends(get_current_user),
     task_service: TaskService = Depends(get_task_service)
 ):
-    return await task_service.create_user_task(current_user, task_data)
+    """Creates a new task for a specific day."""
+    try:
+        day = date.fromisoformat(day_str)
+    except ValueError:
+        raise HTTPException(status_code=400, detail="Invalid date format. Use YYYY-MM-DD.")
+    return await task_service.add_task_to_day(current_user.id, day, task_data)
 
-@app.put("/api/tasks/{task_id}", response_model=TaskResponse, tags=["Tasks"])
-async def update_task(
+# --- PUT, DELETE, Export endpoints ---
+@app.put("/api/logs/{day_str}/tasks/{task_id}", response_model=TaskResponse, tags=["Daily Logs"])
+async def update_task_for_a_day(
+    day_str: str,
     task_id: str,
     task_data: TaskUpdate,
     current_user: User = Depends(get_current_user),
     task_service: TaskService = Depends(get_task_service)
 ):
-    updated_task = await task_service.update_user_task(current_user, task_id, task_data)
+    try:
+        day = date.fromisoformat(day_str)
+    except ValueError:
+        raise HTTPException(status_code=400, detail="Invalid date format. Use YYYY-MM-DD.")
+    updated_task = await task_service.update_user_task(current_user.id, day, task_id, task_data)
     if not updated_task:
         raise HTTPException(status_code=404, detail="Task not found or permission denied")
     return updated_task
 
-@app.delete("/api/tasks/{task_id}", status_code=204, tags=["Tasks"])
-async def delete_task(
+@app.delete("/api/logs/{day_str}/tasks/{task_id}", status_code=204, tags=["Daily Logs"])
+async def delete_task_for_a_day(
+    day_str: str,
     task_id: str,
     current_user: User = Depends(get_current_user),
     task_service: TaskService = Depends(get_task_service)
 ):
-    success = await task_service.delete_user_task(current_user, task_id)
+    try:
+        day = date.fromisoformat(day_str)
+    except ValueError:
+        raise HTTPException(status_code=400, detail="Invalid date format. Use YYYY-MM-DD.")
+    success = await task_service.delete_user_task(current_user.id, day, task_id)
     if not success:
         raise HTTPException(status_code=404, detail="Task not found or permission denied")
     return None
 
-@app.get("/api/tasks/export", tags=["Tasks"])
-async def export_tasks_as_pdf(
+@app.get("/api/logs/{day_str}/export", tags=["Daily Logs"])
+async def export_daily_log_as_pdf(
+    day_str: str,
     current_user: User = Depends(get_current_user),
     task_service: TaskService = Depends(get_task_service)
 ):
-    """Exports all tasks for the current user as a formatted PDF file."""
-    
-    tasks = await task_service.get_user_tasks(current_user)
+    try:
+        day = date.fromisoformat(day_str)
+    except ValueError:
+        raise HTTPException(status_code=400, detail="Invalid date format. Use YYYY-MM-DD.")
+        
+    tasks = await task_service.get_tasks_for_day(current_user.id, day)
     
     buffer = BytesIO()
     doc = SimpleDocTemplate(buffer, pagesize=letter)
@@ -132,9 +143,8 @@ async def export_tasks_as_pdf(
     elements = []
 
     # --- Document Header ---
-    today = datetime.now()
     elements.append(Paragraph("THE TO-DO LIST", styles['h1']))
-    elements.append(Paragraph(f"THINGS TO DO TODAY: DAY {today.strftime('%A')} DATE {today.strftime('%d %B %Y')}", styles['Normal']))
+    elements.append(Paragraph(f"THINGS TO DO: {day.strftime('%A, %d %B %Y')}", styles['Normal']))
     elements.append(Paragraph(f"USER: {current_user.username}", styles['Normal']))
     elements.append(Spacer(1, 24))
 
@@ -148,7 +158,7 @@ async def export_tasks_as_pdf(
         data.append([priority_text, task_title_paragraph, time_text, done_text])
 
     # --- Table Creation & Styling ---
-    table = Table(data, colWidths=[1.2*72, 3.3*72, 1*72, 0.8*72]) 
+    table = Table(data, colWidths=[1.2*72, 3.3*72, 1*72, 0.8*72])
     style = TableStyle([
         ('BACKGROUND', (0,0), (-1,0), colors.grey),
         ('TEXTCOLOR',(0,0),(-1,0),colors.whitesmoke),
@@ -169,5 +179,5 @@ async def export_tasks_as_pdf(
     return Response(
         content=buffer.getvalue(),
         media_type="application/pdf",
-        headers={"Content-Disposition": f"attachment; filename=tasks_{current_user.id}.pdf"}
+        headers={"Content-Disposition": f"attachment; filename=tasks_{day.strftime('%Y-%m-%d')}.pdf"}
     )

@@ -1,49 +1,11 @@
-# Environment Variables
-.env
-*.env.local
-backend/.env
-frontend/.env
-
-# Python / Pytest
-# Virtual Environments
-.venv/
-venv/
-ENV/
-env/
-
-# Python Cache
-__pycache__/
-*.pyc
-
-# Pytest Cache
-.pytest_cache/
-
-# Python packaging artifacts
-*.egg-info/
-build/
-dist/
-
-# Node.js / React
-# Dependency directories
-**/node_modules
-
-# Frontend build output
-/frontend/build/
-
-# Log files
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-
-# Editor & IDE specific files
+# IDE and Editor Files
 .vscode/
 .idea/
+.history/
 *.swp
 *~
-# VS Code history extension folder
-.history/
 
-# Operating System specific files
+# Operating System Files
 # macOS
 .DS_Store
 .AppleDouble
@@ -53,6 +15,47 @@ yarn-error.log*
 Thumbs.db
 ehthumbs.db
 Desktop.ini
+
+# Secrets & Environment Variables
+.env
+*.env
+*.env.local
+backend/.env
+frontend/.env
+tests-k6/local/.env
+tests-k6/deploy/.env
+
+# Python / Pytest
+# Virtual Environments
+.venv/
+venv/
+ENV/
+env/
+
+# Python Cache & Artifacts
+__pycache__/
+*.pyc
+*.egg-info/
+
+# Pytest Cache
+.pytest_cache/
+.coverage
+
+# Node.js / React / Webpack
+# Dependency directories (most important rule)
+**/node_modules
+
+# Build output from React app
+/frontend/build/
+
+# Build output from k6 test scripts (Webpack)
+/dist-k6/
+
+# Log files
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
 
 # Application Data
 /backend-data/

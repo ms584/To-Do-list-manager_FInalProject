@@ -1,14 +1,14 @@
-# Full-Stack To-Do List Application
+# Full-Stack Daily Planner Application (Final Project)
 
 <!-- Badges -->
-![GitHub license](https://img.shields.io/github/license/ms584/To-Do-list-manager_FInalProject)
-![GitHub stars](https://img.shields.io/github/stars/ms584/To-Do-list-manager_FInalProject?style=social)
+[![License: MIT](https://img.shields.io/github/license/ms584/To-Do-list-manager_FInalProject?style=flat-square)](LICENSE)
+[![GitHub stars](https://img.shields.io/github/stars/ms584/To-Do-list-manager_FInalProject?style=social)](https://github.com/ms584/To-Do-list-manager_FInalProject/stargazers)
 [![Python](https://img.shields.io/badge/Python-3.9-3776AB?style=flat-square&logo=python)](https://www.python.org/)
 [![React](https://img.shields.io/badge/React-18-61DAFB?style=flat-square&logo=react)](https://reactjs.org/)
 [![MongoDB](https://img.shields.io/badge/MongoDB-47A248?style=flat-square&logo=mongodb&logoColor=white)](https://www.mongodb.com/)
 [![Docker](https://img.shields.io/badge/Docker-20.10-2496ED?style=flat-square&logo=docker)](https://www.docker.com/)
 
-A complete full-stack web application featuring a modern frontend, a robust backend, and a fully containerized deployment environment using Docker. The application allows users to sign in with their Google account to create, view, update, delete, and export their personal to-do lists.
+A complete, production-ready full-stack web application built from the ground up. This Daily Planner allows authenticated users to manage their personal to-do lists on a day-by-day basis, with a secure authentication system and a fully containerized deployment workflow.
 
 ---
 
@@ -18,7 +18,7 @@ A complete full-stack web application featuring a modern frontend, a robust back
 
 **[https://to-do-list-manager-73ch.onrender.com](https://to-do-list-manager-73ch.onrender.com)**
 
-*(Note: The free tier on Render may cause the backend to "spin down" after 15 minutes of inactivity. The first request after a break might take 30-60 seconds while the service "wakes up.")*
+*(Note: The free tier may cause services to "spin down" after 15 minutes of inactivity. The first login might take 30-60 seconds to wake up the services.)*
 
 ---
 
@@ -26,20 +26,19 @@ A complete full-stack web application featuring a modern frontend, a robust back
 
 ![Screenshot of the To-Do List Application](https://github.com/user-attachments/assets/e332707b-1e3c-4b84-88c3-45cbb1e7bf96)
 
-*(To add a screenshot: take a picture of the app, go to the "Issues" tab in this GitHub repo, create a "New Issue", drag-and-drop the image into the text box, copy the generated URL, and paste it here.)*
-
 ---
 
 ## Features
 
-*   **Secure Authentication:** Users can sign in securely using their **Google Account (OAuth 2.0)**.
-*   **Multi-Tenancy:** Each user has their own private to-do list; data is securely isolated.
-*   **Full CRUD Functionality:** Create, Read, Update, and Delete tasks.
-*   **Task Prioritization:** Assign a priority level (High, Medium, Low) to each task.
-*   **Task Scheduling:** Add a specific time to each task.
-*   **Data Export:** Users can export their current to-do list as a formatted **PDF document**.
-*   **Responsive Design:** The UI is optimized for a seamless experience on both desktop and mobile devices.
-*   **Containerized:** The entire stack is containerized with **Docker** and orchestrated with **Docker Compose** for easy, reproducible development and deployment.
+- **Secure Authentication:** Users can log in securely using their **Google Account (OAuth 2.0)**.
+- **Daily Planner:** Manage tasks on a per-day basis with a date picker for easy navigation.
+- **Multi-Tenancy:** Each user has their own private daily logs; data is completely isolated between users.
+- **Full CRUD Functionality:** Create, Read, Update, and Delete tasks for any given day.
+- **Task Prioritization & Scheduling:** Assign a priority level (High, Medium, Low) and a specific time to each task.
+- **Data Export:** Users can export their daily to-do list as a formatted **PDF document**.
+- **Responsive Design:** The UI is optimized for a seamless experience on both desktop and mobile devices.
+- **Containerized & Reproducible:** The entire stack is containerized with **Docker** for consistent development and deployment environments.
+- **Tested & Secure:** Includes a complete **Pytest** suite for the backend API and a **k6** load testing suite.
 
 ---
 
@@ -47,28 +46,30 @@ A complete full-stack web application featuring a modern frontend, a robust back
 
 | Category      | Technology                                           |
 | :------------ | :--------------------------------------------------- |
-| **Frontend**  | React, React Router, Axios, `@react-oauth/google`    |
+| **Frontend**  | React, React Router, Axios, `@react-oauth/google`, `date-fns` |
 | **Backend**   | Python 3.9, FastAPI, Pydantic v2                     |
 | **Database**  | MongoDB (with Beanie ODM)                            |
 | **Web Server**| Nginx (as a Reverse Proxy)                           |
 | **DevOps**    | Docker, Docker Compose, GitHub Actions (CI/CD)       |
-| **Auth**      | JWT (JSON Web Tokens), OAuth 2.0                     |
+| **Testing**   | **k6 (Load Testing)**                                |
 | **Deployment**| Render (PaaS)                                        |
 
 ---
 
 ## Project Structure
 
-The project is organized into a clean, modern monorepo structure with clear separation between the frontend, backend, and infrastructure configuration.
+The project follows a clean monorepo structure, separating concerns for scalability and maintainability.
 
 ```
 To-Do-list-manager_FInalProject/
 │
-├── .gitignore               # Specifies all files and folders for Git to ignore (e.g., node_modules, .env).
+├── .babelrc                 # Babel configuration for bundling k6 test scripts.
+├── .gitignore               # Specifies all files and folders for Git to ignore.
 ├── README.md                # This documentation file.
-├── docker-compose.yml       # The master file to run the entire application stack locally.
-├── package.json             # Dependencies for local utility scripts (e.g., security test).
-├── package-lock.json        # Locks dependency versions for local scripts.
+├── docker-compose.yml       # The master file to orchestrate all Docker containers for local development.
+├── package.json             # Dependencies for the k6/Webpack test bundling setup.
+├── package-lock.json        # Locks dependency versions for the test setup.
+├── webpack.config.js        # Webpack configuration to bundle k6 scripts and handle modules.
 │
 ├── backend/
 │   ├── .env.example         # Example environment variables required for the backend.
@@ -83,41 +84,57 @@ To-Do-list-manager_FInalProject/
 │   │   └── security.py      # Manages JWT creation and user authentication.
 │   │
 │   ├── documents.py         # Beanie ODM models (defines the database schema for Users & Tasks).
-│   ├── repositories.py      # Data Access Layer (handles direct DB communication, e.g., finding a user).
+│   ├── repositories.py      # Data Access Layer (not heavily used due to ODM power, but maintains structure).
 │   ├── schemas.py           # Pydantic models (defines API data shapes & validation for requests/responses).
 │   └── services.py          # Business Logic Layer (implements core features like creating a task).
 │
 ├── backend-data/            # (Ignored by Git) Stores persistent data for the local MongoDB volume.
 │
-└── frontend/
-    ├── .env.example         # Example environment variables required for the frontend.
-    ├── Dockerfile           # Blueprint to build the React frontend and Nginx server.
-    ├── nginx.conf           # Configuration for the Nginx web server and reverse proxy.
-    ├── package.json         # Dependencies (React, Axios, etc.) for the frontend app.
+├── frontend/
+│   ├── .env.example         # Example environment variables required for the frontend.
+│   ├── Dockerfile           # Blueprint to build the React frontend and Nginx server.
+│   ├── nginx.conf           # Configuration for the Nginx web server and reverse proxy.
+│   ├── package.json         # Dependencies (React, Axios, etc.) for the frontend app.
+│   │
+│   ├── public/              # Static assets and the main HTML shell for the app.
+│   │   └── index.html       # The main HTML template where the React app is loaded.
+│   │
+│   └── src/                 # The React application's source code.
+│       ├── App.css          # Main stylesheet for the application.
+│       ├── App.js           # The main React component with UI, logic, and routing.
+│       ├── index.css        # Global styles for the application.
+│       └── index.js         # The entry point that renders the React app into the DOM.
+│
+└── tests-k6/                # Performance and Load Testing suite using k6.
+    ├── .env.example         # Example of root environment variables for the test suite.
     │
-    ├── public/              # Static assets and the main HTML shell for the app.
-    │   └── index.html       # The main HTML template where the React app is loaded.
+    ├── common/
+    │   └── scenarios.js     # Shared user behavior logic (e.g., login, add task) for all k6 tests.
     │
-    └── src/                 # The React application's source code.
-        ├── App.css          # Main stylesheet for the application.
-        ├── App.js           # The main React component with UI, logic, and routing.
-        ├── index.css        # Global styles for the application.
-        └── index.js         # The entry point that renders the React app into the DOM.
+    ├── deploy/              # Test scripts configured for the deployed (production) environment.
+    │   ├── .env.example
+    │   ├── load-test.js
+    │   ├── soak-test.js
+    │   ├── spike-test.js
+    │   └── stress-test.js
+    │
+    └── local/               # Test scripts configured for the local development environment.
+        ├── .env.example
+        ├── load-test.js
+        ├── soak-test.js
+        ├── spike-test.js
+        └── stress-test.js
 ```
 
 ---
 
 ## Local Development Setup
 
-These instructions will get the project running on your local machine for development and testing.
-
 ### Prerequisites
 
-*   **Docker & Docker Compose:** The only essential requirement.
-    *   [Install Docker Desktop](https://www.docker.com/products/docker-desktop/)
-*   **Git:** For cloning the repository.
-    *   [Install Git](https://git-scm.com/downloads)
-*   **Google Client ID:** You will need to create your own OAuth 2.0 Client ID from the [Google Cloud Console](https://console.cloud.google.com/).
+- **Docker & Docker Compose:** [Install Docker Desktop](https://www.docker.com/products/docker-desktop/)
+- **Git:** [Install Git](https://git-scm.com/downloads)
+- **Google Client ID:** Create from the [Google Cloud Console](https://console.cloud.google.com/).
 
 ### Installation & Running
 
@@ -128,45 +145,59 @@ These instructions will get the project running on your local machine for develo
     ```
 
 2.  **Create Environment Files:**
-    *   Create a `.env` file in the project's root directory and add your Google Client ID and a secret key:
-        ```
-        GOOGLE_CLIENT_ID=YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com
-        SECRET_KEY=a-very-strong-and-random-secret-key
-        ```
-    *   Create a `.env` file in the `frontend/` directory and add your Google Client ID:
-        ```
-        REACT_APP_GOOGLE_CLIENT_ID=YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com
-        ```
+    Copy the `.env.example` files in the `backend/` and `frontend/` directories to `.env` files in their respective locations, and fill in your actual values (especially your **Google Client ID**).
 
 3.  **Build and run the containers:**
-    This single command builds the images, creates the containers, and starts the entire application stack.
     ```bash
     docker compose up --build
     ```
-    *   Add the `-d` flag (`docker compose up --build -d`) to run in the background.
+    - Add the `-d` flag to run in the background.
 
 4.  **Access the application:**
-    Once the containers are running, open your web browser and navigate to:
     > **`http://localhost`**
 
-To stop the application, press `Ctrl+C`. If running in the background, use `docker compose down -v`.
+To stop the application, use `docker compose down -v`.
 
 ---
 
-## Deployment on Render
+## Testing
 
-This application is deployed using **Render's** free tier.
+### Backend API Tests (Pytest)
 
-1.  **Deploy the Database:** Create a **MongoDB** database on Render (or use a free service like MongoDB Atlas) and get the **Internal Connection String**.
-2.  **Deploy the Backend:**
-    *   Create a new **Web Service** on Render, pointing to your GitHub repository.
-    *   Set the **Environment** to **Docker** and the **Root Directory** to `backend`.
-    *   Add the required Environment Variables: `DATABASE_URL` (from your database), `GOOGLE_CLIENT_ID`, and `SECRET_KEY`.
-3.  **Deploy the Frontend:**
-    *   Create a new **Static Site** on Render.
-    *   Set the **Root Directory** to `frontend`, **Build Command** to `npm run build`, and **Publish Directory** to `build`.
-    *   Add an Environment Variable with the key `REACT_APP_API_URL` and the value set to your backend's URL with `/api` appended. Also add `REACT_APP_GOOGLE_CLIENT_ID`.
-4.  **Update Google Cloud Console:** Add your final frontend URL to the list of "Authorized JavaScript origins" in your OAuth Client ID settings.
+1.  **Ensure the application is running:** `docker compose up -d`
+2.  **Execute the tests inside the backend container:**
+    ```bash
+    docker compose exec backend pytest
+    ```
+
+### Performance & Load Tests (k6)
+
+This project includes a comprehensive k6 suite for various performance tests.
+
+1.  **Install k6:** [Follow the official installation guide](https://k6.io/docs/getting-started/installation/).
+2.  **Prepare the test scripts:**
+    - Create a `.env` file inside `tests-k6/local/` (copy from `.env.example`) and add a valid JWT token obtained from your local application.
+    - Run the Webpack bundler once to compile the test scripts:
+      ```bash
+      npm install
+      npx webpack
+      ```
+3.  **Run a local test (e.g., Load Test):**
+    ```bash
+    k6 run dist-k6/local/load-test.js
+    ```
+    *(You can also run `stress-test.js`, `soak-test.js`, or `spike-test.js`)*
+
+---
+
+## Deployment
+
+This application is deployed on **Render** and is configured for **Continuous Deployment**. Any push to the `main` branch will automatically trigger a new deployment.
+
+The deployment consists of three separate services on Render:
+1.  **MongoDB Database:** A free-tier instance on MongoDB Atlas.
+2.  **Backend (Web Service):** Built from `backend/Dockerfile` and connected to the Atlas database.
+3.  **Frontend (Static Site):** Built from the `frontend` directory and connected to the live backend API.
 
 ---
 
