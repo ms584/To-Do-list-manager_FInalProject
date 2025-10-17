@@ -17,8 +17,8 @@ const AUTH_TOKEN = getEnvVar('AUTH_TOKEN');
 
 export const options = {
   stages: [
-    { duration: '30s', target: 15 },
-    { duration: '5m', target: 15 },
+    { duration: '30s', target: 20 },
+    { duration: '10m', target: 20 },
     { duration: '10s', target: 0 },
   ],
   thresholds: {

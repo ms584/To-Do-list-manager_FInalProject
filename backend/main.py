@@ -27,7 +27,7 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(title="Daily Planner API", version="2.0.0", lifespan=lifespan)
 
-# CORS Middleware (ต้องมี)
+# CORS Middleware
 origins = ["*"] 
 app.add_middleware(
     CORSMiddleware,
@@ -44,7 +44,7 @@ def get_task_service():
 def get_auth_service():
     return AuthService()
     
-# --- Authentication & User Endpoints (นำเนื้อหาจริงกลับมาใส่) ---
+# --- Authentication & User Endpoints ---
 @app.post("/api/auth/google/login", response_model=Token, tags=["Authentication"])
 async def login_with_google(
     token_data: GoogleToken,

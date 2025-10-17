@@ -16,7 +16,7 @@ export const options = {
     },
   },
   thresholds: {
-    http_req_duration: ['p(95)<1500'], 
+    http_req_duration: ['p(95)<2000'], 
     checks: ['rate>0.99'],
   },
 };

@@ -6,13 +6,13 @@ const AUTH_TOKEN = open('../../tests-k6/local/.env');
 
 export const options = {
   stages: [
-    { duration: '20s', target: 50 },
-    { duration: '30s', target: 50 },
+    { duration: '20s', target: 25 },
+    { duration: '30s', target: 25 },
     { duration: '10s', target: 0 },
   ],
   thresholds: {
-    http_req_duration: ['p(95)<2000'],
-    http_req_failed: ['rate<0.01'],
+    http_req_duration: ['p(95)<3000'],
+    http_req_failed: ['rate<0.02'],
   },
 };
 

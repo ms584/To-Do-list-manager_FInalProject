@@ -17,15 +17,15 @@ const AUTH_TOKEN = getEnvVar('AUTH_TOKEN');
 
 export const options = {
   stages: [
-    { duration: '1m', target: 10 },
+    { duration: '2m', target: 20 },
     { duration: '10s', target: 100 },
-    { duration: '20s', target: 100 },
-    { duration: '10s', target: 10 },
-    { duration: '1m', target: 10 },
+    { duration: '30s', target: 100 },
+    { duration: '10s', target: 20 },
+    { duration: '2m', target: 20 },
     { duration: '10s', target: 0 },
   ],
   thresholds: {
-    http_req_duration: ['p(95)<5000'],
+    http_req_duration: ['p(95)<4000'],
     http_req_failed: ['rate<0.05'],
   },
 };
