@@ -37,6 +37,11 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# --- Just a Ping ---
+@app.get("/ping")
+def ping():
+    return {"status": "ok"}
+
 # --- Dependency Services ---
 def get_task_service():
     return TaskService()
